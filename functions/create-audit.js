@@ -1,8 +1,24 @@
 export async function onRequest(context) {
+  // Allow both production and dev origins
+  const allowedOrigins = [
+    'https://www.funnelenvy.com',
+    'https://funnelenvydev.wpengine.com'
+  ];
+  const requestOrigin = context.request.headers.get('Origin');
+  const originHeader = allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0];
+
   try {
     // Only allow POST requests
     if (context.request.method !== 'POST') {
-      return new Response('Method Not Allowed', { status: 405 });
+      return new Response('Method Not Allowed', {
+        status: 405,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': originHeader,
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        }
+      });
     }
 
     // Parse the incoming JSON body
@@ -12,7 +28,12 @@ export async function onRequest(context) {
     if (!websiteUrl) {
       return new Response(JSON.stringify({ error: 'Missing website URL' }), {
         status: 400,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': originHeader,
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        },
       });
     }
 
@@ -29,7 +50,12 @@ export async function onRequest(context) {
     if (!jackalResponse.ok) {
       return new Response(JSON.stringify({ error: 'API error' }), {
         status: 502,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': originHeader,
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        },
       });
     }
 
@@ -44,7 +70,12 @@ export async function onRequest(context) {
     if (!jackalId) {
       return new Response(JSON.stringify({ error: 'Invalid Response URL format' }), {
         status: 500,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': originHeader,
+          'Access-Control-Allow-Methods': 'POST, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type'
+        },
       });
     }
 
@@ -53,12 +84,22 @@ export async function onRequest(context) {
 
     return new Response(JSON.stringify({ url: resultUrl }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': originHeader,
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), {
       status: 500,
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': originHeader,
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+      },
     });
   }
 }
