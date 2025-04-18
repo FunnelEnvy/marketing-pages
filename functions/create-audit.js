@@ -7,6 +7,19 @@ export async function onRequest(context) {
   const requestOrigin = context.request.headers.get('Origin');
   const originHeader = allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0];
 
+  // Handle CORS preflight OPTIONS request
+  if (context.request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 204,
+      headers: {
+        'Access-Control-Allow-Origin': originHeader,
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Max-Age': '86400'
+      }
+    });
+  }
+
   try {
     // Only allow POST requests
     if (context.request.method !== 'POST') {
