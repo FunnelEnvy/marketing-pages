@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Embedded Jackal Page</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="jackal-iframe" style="width:100%; height:100vh;"></iframe>
+  <script>
+    // Get the URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    // Get the 'id' parameter
+    const jackalId = urlParams.get('id');
+    // Construct the iframe source URL
+    const iframeSrc = `https://www.tryjackal.com/funnelenvy/${jackalId}`;
+    // Get the iframe element
+    const iframeElement = document.getElementById('jackal-iframe');
+    // Set the iframe src attribute if the id exists
+    if (jackalId && iframeElement) {
+      iframeElement.src = iframeSrc;
+    } else if (iframeElement) {
+      // Optional: Handle cases where 'id' is missing
+      iframeElement.outerHTML = '<p>Error: Missing required "id" query parameter.</p>';
+      console.error('Missing required "id" query parameter.');
+    }
+  </script>
+</body>
+</html>
