@@ -58,7 +58,7 @@ export async function onRequest(context) {
         'Content-Type': 'application/json',
       },
       //TOOD: remove the test parameter
-      body: JSON.stringify({ url: websiteUrl, test: true }),
+      body: JSON.stringify({ url: websiteUrl }),
     });
 
     if (!jackalResponse.ok) {
