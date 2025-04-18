@@ -57,7 +57,8 @@ export async function onRequest(context) {
         'x-api-key': 'jkl_a43bbed7272f7f7676227aae46bb3c2327d889dd',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ url: websiteUrl }),
+      //TOOD: remove the test parameter
+      body: JSON.stringify({ url: websiteUrl, test: true }),
     });
 
     if (!jackalResponse.ok) {
